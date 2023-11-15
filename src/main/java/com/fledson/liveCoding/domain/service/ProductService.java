@@ -36,7 +36,7 @@ public class ProductService {
     public ProductDTO update(RequestUpdateProductDTO data){
         Product product = repository.findById( data.id() )
                             .orElseThrow(
-                                    () -> new EntityNotFoundException("Produto não existe")
+                                    () -> new EntityNotFoundException("Product does not exist")
                             );
 
         BeanUtils.copyProperties(data, product, "id");
@@ -47,7 +47,7 @@ public class ProductService {
     @Transactional
     public void delete(String id) {
         Product product = repository.findById(id)
-                            .orElseThrow( () -> new EntityNotFoundException("Produto não existe") );
+                            .orElseThrow( () -> new EntityNotFoundException("Product does not exist") );
 
         product.setActive(false);
     }
