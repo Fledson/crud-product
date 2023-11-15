@@ -1,5 +1,6 @@
-package com.fledson.liveCoding.domain.product;
+package com.fledson.liveCoding.domain.repository;
 
+import com.fledson.liveCoding.domain.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

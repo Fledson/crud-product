@@ -1,4 +1,4 @@
-package com.fledson.liveCoding.domain.product;
+package com.fledson.liveCoding.domain.model.dto;
 
 import jakarta.validation.constraints.NotNull;
 

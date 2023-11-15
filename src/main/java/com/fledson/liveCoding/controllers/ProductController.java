@@ -1,52 +1,47 @@
 package com.fledson.liveCoding.controllers;
 
-import com.fledson.liveCoding.domain.product.Product;
-import com.fledson.liveCoding.domain.product.ProductRepository;
-import com.fledson.liveCoding.domain.product.RequestProductDTO;
-import com.fledson.liveCoding.domain.product.RequestUpdateProductDTO;
-import jakarta.transaction.TransactionScoped;
+import com.fledson.liveCoding.domain.model.dto.ProductDTO;
+import com.fledson.liveCoding.domain.model.dto.RequestProductDTO;
+import com.fledson.liveCoding.domain.model.dto.RequestUpdateProductDTO;
+import com.fledson.liveCoding.domain.service.ProductService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
 
     @Autowired
-    private ProductRepository repository;
+    private ProductService service;
 
     @GetMapping
-    public ResponseEntity getAllProducts() {
-        var allProducts = repository.findAllByActiveTrue();
-        return ResponseEntity.ok(allProducts);
+    public ResponseEntity<List<ProductDTO>> getAll() {
+        return ResponseEntity.ok(service.getAll());
     }
 
     @PostMapping
-    public ResponseEntity registerProduct(@RequestBody @Valid RequestProductDTO data) {
-        Product newProduct = new Product(data);
-        newProduct = repository.save(newProduct);
-        return ResponseEntity.ok(newProduct);
+    public ResponseEntity<ProductDTO> insert(@RequestBody @Valid RequestProductDTO data) {
+        ProductDTO dto = service.insert(data);
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
     }
 
     @PutMapping
     @Transactional
-    public ResponseEntity updateProduct(@RequestBody @Valid RequestUpdateProductDTO data) {
-        Product product = repository.findById(data.id()).orElseThrow( () -> new RuntimeException("Produto não existe"));
-        BeanUtils.copyProperties(data, product, "id");
-        return ResponseEntity.ok(product);
+    public ResponseEntity<ProductDTO> update(@RequestBody @Valid RequestUpdateProductDTO data) {
+        ProductDTO dto = service.update(data);
+        return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping("/{id}")
     @Transactional
-    public ResponseEntity deleteProduct(@PathVariable String id){
-        Product product = repository.findById(id).orElseThrow( () -> new RuntimeException("Produto não existe"));;
-        product.setActive(false);
+    public ResponseEntity<Void> delete(@PathVariable String id){
+        service.delete(id);
         return ResponseEntity.noContent().build();
     }
 
