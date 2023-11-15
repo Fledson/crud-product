@@ -17,8 +17,10 @@ public class Product {
     private String id;
     private String name;
     private Integer price_in_cents;
+    private Boolean active;
 
     public Product(RequestProductDTO dto) {
         BeanUtils.copyProperties(dto, this);
+        this.active = true;
     }
 }
