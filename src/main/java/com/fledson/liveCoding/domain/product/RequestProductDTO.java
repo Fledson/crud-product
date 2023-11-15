@@ -1,5 +1,11 @@
 package com.fledson.liveCoding.domain.product;
 
-public record RequestProductDTO(String name, Integer price_in_cents) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-}
+public record RequestProductDTO(
+        @NotBlank
+        String name,
+        @NotNull
+        Integer price_in_cents
+) {}
